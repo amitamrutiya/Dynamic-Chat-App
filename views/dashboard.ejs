@@ -5,16 +5,23 @@
 <div class="row">
   <div class="col-md-3">
     <ul class="list-group">
-      <% if(users.length>0){ for (let index = 0; index < users.length; index++)
-      { %>
+      <% if(users.length>0){ for (let i = 0; i < users.length; i++) { %>
       <li class="list-group-item list-group-item-dark cursor-pointer user-list">
         <img
-          src="<%= 'http://localhost:' + port + '/' + users[index]['image'] %>"
+          src="<%= 'http://localhost:' + port + '/' + users[i]['image'] %>"
           alt=""
           width="50px"
           height="50px"
         />
-        <%= users[index]['name'] %>
+        <%= users[i]['name'] %> <% if(users[i]['is_online']){ %>
+        <span class="badge badge-success" id="<%= users[i]['_id'] %>-status"
+          >Online</span
+        >
+        <% } else{ %>
+        <span class="badge badge-danger" id="<%= users[i]['_id'] %>-status"
+          >Offline</span
+        >
+        <% } %>
       </li>
       <% } } else{ %>
       <li class="list-group-item list-group-item-dark">No Users</li>
@@ -41,11 +48,34 @@
 </div>
 
 <script>
+  var sender_id = "<%= user._id %>";
+  var socket = io("/user-namespace", {
+    auth: {
+      token: "<%= user._id %>",
+      name: "<%= user.name %>",
+    },
+  });
+
   $(document).ready(function () {
     $(".user-list").click(function () {
       $(".start-head").hide();
       $(".chat-section").show();
     });
+  });
+
+  //update user status
+  socket.on("getOnlineUser", function (data) {
+    $(`#${data.user_id}-status`)
+      .removeClass("badge-danger")
+      .addClass("badge-success")
+      .text("Online");
+  });
+
+  socket.on("getOfflineUser", function (data) {
+    $(`#${data.user_id}-status`)
+      .removeClass("badge-success")
+      .addClass("badge-danger")
+      .text("Offline");
   });
 </script>
 

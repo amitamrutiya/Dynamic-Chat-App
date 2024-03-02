@@ -5307,7 +5307,9 @@ input[type="button"].btn-block {
 }
 
 .badge {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0.25em 0.4em;
   font-size: 75%;
   font-weight: 700;
@@ -5771,7 +5773,8 @@ a.badge-dark.focus {
 
 .list-group-item {
   position: relative;
-  display: block;
+  display: flex;
+  justify-content: space-between;
   padding: 0.75rem 1.25rem;
   margin-bottom: -1px;
   background-color: #fff;
@@ -10903,17 +10906,17 @@ a[data-toggle="collapse"] {
   cursor: pointer;
 }
 
-#chat-container{
+#chat-container {
   background-color: lightblue;
   width: 100%;
   height: 400px;
   overflow: scroll;
 }
 
-.border{
+.border {
   width: 75%;
 }
 
-.chat-section{
-  display:none
+.chat-section {
+  display: none;
 }

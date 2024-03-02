@@ -81,7 +81,11 @@ const loadDashboard = async (req, res) => {
   try {
     var users = await User.find({ _id: { $nin: [req.session.user._id] } });
     console.log("users" + users);
-    res.render("dashboard", { user: req.session.user, users: users , port:  process.env.PORT });
+    res.render("dashboard", {
+      user: req.session.user,
+      users: users,
+      port: process.env.PORT,
+    });
   } catch (err) {
     console.log(err);
   }

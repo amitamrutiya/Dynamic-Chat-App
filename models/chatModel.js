@@ -29,8 +29,8 @@ const chatSchema = new mongoose.Schema(
       required: true,
     },
     is_online: {
-      type: String,
-      default: "0",
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
