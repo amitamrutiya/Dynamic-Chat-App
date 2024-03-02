@@ -6,7 +6,10 @@
   <div class="col-md-3">
     <ul class="list-group">
       <% if(users.length>0){ for (let i = 0; i < users.length; i++) { %>
-      <li class="list-group-item list-group-item-dark cursor-pointer user-list">
+      <li
+        class="list-group-item list-group-item-dark cursor-pointer user-list"
+        data-id="<% users[i]['_id'] %>"
+      >
         <img
           src="<%= 'http://localhost:' + port + '/' + users[i]['image'] %>"
           alt=""
@@ -31,7 +34,15 @@
   <div class="col-md-9">
     <h3 class="start-head">Click to Start the Chat</h3>
     <div class="chat-section">
-      <div id="chat-container"></div>
+      <div id="chat-container">
+        <div class="current-user-chat">
+          <h5>Hii</h5>
+        </div>
+        <div class="distance-user-chat">
+          <h5>Hii</h5>
+        </div>
+      </div>
+
       <form action="" id="chat-form">
         <input
           class="border"
@@ -49,6 +60,7 @@
 
 <script>
   var sender_id = "<%= user._id %>";
+  var reciver_id = "";
   var socket = io("/user-namespace", {
     auth: {
       token: "<%= user._id %>",
@@ -58,6 +70,8 @@
 
   $(document).ready(function () {
     $(".user-list").click(function () {
+      var userId = $(this).attr('data-id');
+      reciver_id = userId;
       $(".start-head").hide();
       $(".chat-section").show();
     });

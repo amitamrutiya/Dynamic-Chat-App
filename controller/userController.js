@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const session = require("express-session");
 
 const registerLoad = (req, res) => {
   try {
@@ -45,6 +46,7 @@ const loginLoad = (req, res) => {
 
 const login = async (req, res) => {
   try {
+    console.log(req.body);
     const { email, password } = req.body;
     console.log(email, password);
     const userData = await User.findOne({ email });
