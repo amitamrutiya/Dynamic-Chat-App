@@ -1,11 +1,11 @@
 const express = require("express");
 const user_router = express.Router();
-const User = require("../models/userModel");
 const bodyParser = require("body-parser");
 const path = require("path");
 const multer = require("multer");
 const session = require("express-session");
 const userController = require("../controller/userController");
+const auth = require("../middleware/auth");
 require("dotenv").config();
 
 user_router.use(bodyParser.json());
@@ -30,12 +30,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-user_router.get("/", userController.loginLoad);
+user_router.get("/", auth.isLogout, userController.loginLoad);
 user_router.post("/", userController.login);
-user_router.get("/register", userController.registerLoad);
+user_router.get("/register", auth.isLogout, userController.registerLoad);
 user_router.post("/register", upload.single("image"), userController.register);
-user_router.get("/logout", userController.logout);
-user_router.get("/dashboard", userController.loadDashboard);
+user_router.get("/logout", auth.isLogin, userController.logout);
+user_router.get("/dashboard", auth.isLogin, userController.loadDashboard);
 user_router.get("*", (req, res) => {
   res.redirect("/");
 });

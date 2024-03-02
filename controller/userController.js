@@ -15,6 +15,11 @@ const register = async (req, res) => {
       return res.status(400).send("No file was uploaded.");
     }
     const { name, email, password } = req.body;
+    // check if user already exists
+    const isUser = await User.findOne({ email });
+    if (isUser) {
+      return res.render("register", { message: "User already exists" });
+    }
     const passwordHash = await bcrypt.hash(password, 10);
     const imageName = "images/" + req.file.filename;
     const user = new User({
@@ -72,9 +77,11 @@ const logout = (req, res) => {
   }
 };
 
-const loadDashboard = (req, res) => {
+const loadDashboard = async (req, res) => {
   try {
-    res.render("dashboard", { user: req.session.user });
+    var users = await User.find({ _id: { $nin: [req.session.user._id] } });
+    console.log("users" + users);
+    res.render("dashboard", { user: req.session.user, users: users , port:  process.env.PORT });
   } catch (err) {
     console.log(err);
   }
