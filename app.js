@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const http = require("http");
 const userRoute = require("./routes/userRoute");
+const chatRoute = require("./routes/chatRoute");
 const session = require("express-session");
 const connectDB = require("./config/database");
 const socketHandler = require("./socket/socketHandler");
@@ -20,6 +21,7 @@ app.use(
   })
 );
 app.use("/", userRoute);
+app.use("/", chatRoute);
 
 const server = http.createServer(app);
 const io = require("socket.io")(server);

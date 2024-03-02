@@ -46,9 +46,7 @@ const loginLoad = (req, res) => {
 
 const login = async (req, res) => {
   try {
-    console.log(req.body);
     const { email, password } = req.body;
-    console.log(email, password);
     const userData = await User.findOne({ email });
     if (!userData) {
       return res.render("login", {
@@ -82,7 +80,6 @@ const logout = (req, res) => {
 const loadDashboard = async (req, res) => {
   try {
     var users = await User.find({ _id: { $nin: [req.session.user._id] } });
-    console.log("users" + users);
     res.render("dashboard", {
       user: req.session.user,
       users: users,

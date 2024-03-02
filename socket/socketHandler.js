@@ -30,5 +30,10 @@ module.exports = function (usp) {
 
       socket.broadcast.emit("getOfflineUser", { user_id: userId });
     });
+
+    // chatting implementation
+    socket.on("newChat", (data) => {
+      socket.broadcast.emit('loadNewChat', data);
+    });
   });
 };
