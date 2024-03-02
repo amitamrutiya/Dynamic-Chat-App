@@ -55,12 +55,10 @@ $("#chat-form").submit(function (e) {
                     let chat = response.data.message;
                     let html =
                         `
-            <div class="current-user-chat">
-              <h5>` +
-                        chat +
-                        `</h5>
-            </div>
-            `;
+                            <div class="current-user-chat" id=${response.data._id} >
+                                <h5>${chat} <i class="fa fa-trash" aria-hidden="true" data-id=${response.data._id} data-toggle="modal" data-target="#deleteChatModel"></i> </h5>
+                            </div>
+                        `;
                     $("#chat-container").append(html);
                     scrollChat();
                     socket.emit("newChat", response.data);
@@ -77,7 +75,7 @@ socket.on("loadNewChat", function (data) {
         let chat = data.message;
         let html =
             `
-    <div class="distance-user-chat">
+    <div class="distance-user-chat" id=${data._id}>
       <h5>` +
             chat +
             `</h5>
@@ -101,8 +99,8 @@ socket.on("loadOldChat", function (data) {
             `;
         } else {
             html = `
-                <div class="current-user-chat">
-                    <h5>${chat.message}</h5>
+                <div class="current-user-chat" id=${chat._id}>
+                    <h5>${chat.message} <i class="fa fa-trash" aria-hidden="true" data-id=${chat._id} data-toggle="modal" data-target="#deleteChatModel"></i></h5>
                 </div>
             `;
         }
@@ -114,3 +112,33 @@ socket.on("loadOldChat", function (data) {
 function scrollChat() {
     $("#chat-container").animate({ scrollTop: $('#chat-container').prop("scrollHeight") }, 500);
 }
+$(document).on("click", ".fa-trash", function () {
+    let msg = $(this).parent().text();
+    $("#delete-message").text(msg)
+    $("#delete-message-id").val($(this).attr("data-id"));
+});
+
+$("#delete-chat-form").submit(function (e) {
+    e.preventDefault();
+    let id = $("#delete-message-id").val();
+    $.ajax({
+        url: "/delete-chat",
+        type: "POST",
+        data: {
+            id,
+        },
+        success: function (response) {
+            if (response.success) {
+                $(`#${id}`).remove();
+                $("#deleteChatModel").modal("hide");
+                socket.emit("chatDeleted", id);
+            } else {
+                alert(response.message);
+            }
+        },
+    });
+})
+
+socket.on("chatMessageDeleted", function (id) {
+    $(`#${id}`).remove();
+});

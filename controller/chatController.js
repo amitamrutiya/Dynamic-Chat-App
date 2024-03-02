@@ -21,6 +21,18 @@ const saveChat = async (req, res) => {
   }
 };
 
+const deleteChat = async (req, res) => {
+  try {
+    const { chat_id } = req.body;
+    await Chat.findByIdAndDelete(chat_id);
+    res.status(200).send({ success: true, message: "Chat deleted successfully" });
+  }
+  catch (error) {
+    res.status(400).send({ success: false, message: error.message });
+  }
+}
+
 module.exports = {
   saveChat,
+  deleteChat,
 };

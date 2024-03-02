@@ -49,5 +49,11 @@ module.exports = function (usp) {
 
       socket.emit('loadOldChat', chats);
     });
+
+
+    // delete chat
+    socket.on('chatDeleted', async (id) => {
+      socket.broadcast.emit('chatMessageDeleted', id);
+    });
   });
 };
