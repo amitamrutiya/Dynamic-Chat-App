@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const Chat = require("../models/chatModel");
 
 module.exports = function (usp) {
   usp.on("connection", async (socket) => {
@@ -34,6 +35,19 @@ module.exports = function (usp) {
     // chatting implementation
     socket.on("newChat", (data) => {
       socket.broadcast.emit('loadNewChat', data);
+    });
+
+    // load old chats
+    socket.on('existsChat', async (data) => {
+      const { sender_id, receiver_id } = data;
+      const chats = await Chat.find({
+        $or: [
+          { sender_id: receiver_id, receiver_id: sender_id },
+          { sender_id, receiver_id },
+        ],
+      });
+
+      socket.emit('loadOldChat', chats);
     });
   });
 };
