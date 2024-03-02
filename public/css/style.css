@@ -10934,3 +10934,6 @@ a[data-toggle="collapse"] {
 .fa-trash{
   color:#840018;
 }
+.fa-edit{
+  color:var(--blue);
+}

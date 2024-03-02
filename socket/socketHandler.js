@@ -52,8 +52,13 @@ module.exports = function (usp) {
 
 
     // delete chat
-    socket.on('chatDeleted', async (id) => {
+    socket.on('chatDeleted', (id) => {
       socket.broadcast.emit('chatMessageDeleted', id);
+    });
+
+    // update chat
+    socket.on('chatUpdated', (data) => {
+      socket.broadcast.emit('chatMessageUpdated', data);
     });
   });
 };

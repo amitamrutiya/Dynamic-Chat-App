@@ -50,7 +50,7 @@
     </div>
   </div>
 </div>
-
+<!-- Delete Model -->
 <div
   class="modal fade"
   id="deleteChatModel"
@@ -88,6 +88,44 @@
     </div>
   </div>
 </div>
+<!-- Update Model -->
+<div
+  class="modal fade"
+  id="editChatModel"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Chat</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="" id="edit-chat-form">
+        <div class="modal-body">
+          <input type="hidden" name="id" id="edit-message-id" />
+          <input type="text" name="message" id="edit-message" required placeholder="Enter Message">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script>
   var sender_id = "<%= user._id %>";
   var token = "<%= user._id %>";

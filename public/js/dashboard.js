@@ -53,12 +53,15 @@ $("#chat-form").submit(function (e) {
                 if (response.success) {
                     $("#message").val("");
                     let chat = response.data.message;
-                    let html =
-                        `
-                            <div class="current-user-chat" id=${response.data._id} >
-                                <h5>${chat} <i class="fa fa-trash" aria-hidden="true" data-id=${response.data._id} data-toggle="modal" data-target="#deleteChatModel"></i> </h5>
-                            </div>
-                        `;
+                    let html = `
+                        <div class="current-user-chat" id=${response.data._id}>
+                            <h5>
+                                <span>${chat}</span>
+                                <i class="fa fa-trash" aria-hidden="true" data-id=${response.data._id} data-toggle="modal" data-target="#deleteChatModel"></i>
+                                <i class="fa fa-edit" aria-hidden="true" data-msg=${chat} data-id=${response.data._id} data-toggle="modal" data-target="#editChatModel"></i>
+                            </h5>
+                        </div>
+                    `;
                     $("#chat-container").append(html);
                     scrollChat();
                     socket.emit("newChat", response.data);
@@ -73,14 +76,11 @@ $("#chat-form").submit(function (e) {
 socket.on("loadNewChat", function (data) {
     if (sender_id === data.receiver_id || receiver_id === data.sender_id) {
         let chat = data.message;
-        let html =
-            `
-    <div class="distance-user-chat" id=${data._id}>
-      <h5>` +
-            chat +
-            `</h5>
-    </div>
-    `;
+        let html = `
+            <div class="distance-user-chat" id="${data._id}" >
+                <h5><span>${chat}</span></h5>
+            </div>
+        `;
         $("#chat-container").append(html);
         scrollChat();
     }
@@ -93,17 +93,22 @@ socket.on("loadOldChat", function (data) {
         let html = "";
         if (chat.sender_id === receiver_id) {
             html = `
-                <div class="distance-user-chat">
-                    <h5>${chat.message}</h5>
+                <div class="distance-user-chat" id="${chat._id}">
+                    <h5><span>${chat.message}</span></h5>
                 </div>
             `;
         } else {
             html = `
                 <div class="current-user-chat" id=${chat._id}>
-                    <h5>${chat.message} <i class="fa fa-trash" aria-hidden="true" data-id=${chat._id} data-toggle="modal" data-target="#deleteChatModel"></i></h5>
+                    <h5>
+                        <span>${chat.message}</span>
+                        <i class="fa fa-trash" aria-hidden="true" data-id=${chat._id} data-toggle="modal" data-target="#deleteChatModel"></i>
+                        <i class="fa fa-edit" aria-hidden="true" data-msg=${chat.message} data-id=${chat._id} data-toggle="modal" data-target="#editChatModel"></i>
+                    </h5>
                 </div>
             `;
         }
+
         $("#chat-container").append(html);
         scrollChat();
     });
@@ -112,6 +117,8 @@ socket.on("loadOldChat", function (data) {
 function scrollChat() {
     $("#chat-container").animate({ scrollTop: $('#chat-container').prop("scrollHeight") }, 500);
 }
+
+// Delete Chat
 $(document).on("click", ".fa-trash", function () {
     let msg = $(this).parent().text();
     $("#delete-message").text(msg)
@@ -141,4 +148,42 @@ $("#delete-chat-form").submit(function (e) {
 
 socket.on("chatMessageDeleted", function (id) {
     $(`#${id}`).remove();
+});
+
+
+// Edit Chat
+$(document).on("click", ".fa-edit", function () {
+    let msg = $(this).attr("data-msg");
+    let id = $(this).attr("data-id");
+    $("#edit-message-id").val(id);
+    $("#edit-message").val(msg);
+});
+
+$("#edit-chat-form").submit(function (e) {
+    e.preventDefault();
+    let id = $("#edit-message-id").val();
+    let message = $("#edit-message").val();
+    $.ajax({
+        url: "/update-chat",
+        type: "POST",
+        data: {
+            id,
+            message,
+        },
+        success: function (response) {
+            if (response.success) {
+                $("#editChatModel").modal("hide");
+                $(`#${id}`).find("span").text(message);
+                $(`#${id}`).find(".fa-edit").attr("data-msg", message);
+                socket.emit("chatUpdated", { id, message });
+            } else {
+                alert(response.message);
+            }
+        },
+    });
+})
+
+socket.on("chatMessageUpdated", function (data) {
+    let messageElement = $(`#${data.id}`).find("span");
+    messageElement.text(data.message);
 });
