@@ -18,9 +18,11 @@ $('.addMember').click(function () {
                 let users = response.data;
                 let html = '';
                 users.forEach(user => {
+                    console.log(user);
+                    let isMemberOfGroup = user['member'].length > 0;
                     html += `
                         <tr>
-                            <td><input type="checkbox" name="members[]" value="${user._id}"></td>
+                            <td><input type="checkbox" ${isMemberOfGroup ? 'checked' : ''} name="members[]" value="${user._id}"></td>
                             <td>${user.name}</td>
                         </tr>
                         `

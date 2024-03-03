@@ -1,6 +1,7 @@
 const Group = require("../models/groupModel");
 const User = require("../models/userModel");
 const Member = require("../models/memberModel");
+const mongoose = require("mongoose");
 
 const loadGroups = async (req, res) => {
     try {
@@ -30,7 +31,32 @@ const createGroup = async (req, res) => {
 };
 const getMembers = async (req, res) => {
     try {
-        const users = await User.find({ _id: { $nin: req.session.user._id } })
+        const users = await User.aggregate([
+            {
+                $lookup: {
+                    from: 'members',
+                    localField: '_id',
+                    foreignField: 'user_id',
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$group_id', new mongoose.Types.ObjectId(req.body.group_id)] },
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    as: 'member'
+                }
+            },
+            {
+                $match: {
+                    _id: { $ne: new mongoose.Types.ObjectId(req.session.user._id) }
+                }
+            },
+        ])
         res.status(200).send({ success: true, data: users });
     } catch (error) {
         res.status(400).send({ success: false, message: error.message });
