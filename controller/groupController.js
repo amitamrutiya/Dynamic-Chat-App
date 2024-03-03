@@ -87,9 +87,43 @@ const addMembers = async (req, res) => {
     }
 };
 
+const updateGroup = async (req, res) => {
+    try {
+        if (parseInt(req.body.limit) < 1) {
+            return res.status(200).send({ success: false, message: "Limit should be greater than 0" });
+        } else if (parseInt(req.body.limit) < parseInt(req.body.last_limit)) {
+            await Member.deleteMany({ group_id: req.body.id });
+        }
+
+        let updateObj;
+        console.log("req" + req)
+        if (req.file != undefined) {
+            updateObj = {
+                name: req.body.name,
+                image: 'images/' + req.file.filename,
+                limit: req.body.limit,
+                description: req.body.description
+            }
+        } else {
+            updateObj = {
+                name: req.body.name,
+                limit: req.body.limit,
+                description: req.body.description
+            }
+        }
+        const updatedGroup = await Group.findByIdAndUpdate(req.body.id, { $set: updateObj }, { new: true });
+
+        return res.status(200).send({ success: true, message: "Group Update successfully", data: updatedGroup });
+
+    } catch (error) {
+        return res.status(400).send({ success: false, message: error.message });
+    }
+}
+
 module.exports = {
     loadGroups,
     createGroup,
     getMembers,
     addMembers,
+    updateGroup,
 };
