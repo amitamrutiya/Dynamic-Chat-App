@@ -1,4 +1,5 @@
 const Group = require("../models/groupModel");
+const User = require("../models/userModel");
 
 const loadGroups = async (req, res) => {
     try {
@@ -26,10 +27,17 @@ const createGroup = async (req, res) => {
         res.status(400).send({ success: false, message: error.message });
     }
 };
-
-
+const getMembers = async (req, res) => {
+    try {
+        const users = await User.find({ _id: { $nin: req.session.user._id } })
+        res.status(200).send({ success: true, data: users });
+    } catch (error) {
+        res.status(400).send({ success: false, message: error.message });
+    }
+};
 
 module.exports = {
     loadGroups,
-    createGroup
+    createGroup,
+    getMembers
 };

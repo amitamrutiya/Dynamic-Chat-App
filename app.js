@@ -25,7 +25,7 @@ app.use(
 );
 app.use("/", userRoute);
 app.use("/", chatRoute);
-app.use("/", groupRoute);
+app.use("/groups", groupRoute);
 
 app.get("*", (req, res) => {
   res.redirect("/");

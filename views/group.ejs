@@ -30,8 +30,7 @@
     </thead>
 
     <tbody>
-      <% if (groups.length > 0) { %>
-      <% groups.forEach((group, index) => { %>
+      <% if (groups.length > 0) { %> <% groups.forEach((group, index) => { %>
       <tr>
         <td><%= index + 1 %></td>
         <td>
@@ -44,12 +43,19 @@
         </td>
         <td><%= group.name %></td>
         <td><%= group.limit %></td>
-        <td>3</td>
+        <td>
+          <a
+            class="cursor-pointer addMember"
+            data-id="<%= group._id %>"
+            data-limit="<%= group.limit %>"
+            data-toggle="modal"
+            data-target="#memberModal"
+            >Members</a
+          >
+        </td>
         <td>
           <a href="/group/<%= group._id %>" class="btn btn-primary">View</a>
-          <a
-            href="/group/<%= group._id %>/edit"
-            class="btn btn-warning"
+          <a href="/group/<%= group._id %>/edit" class="btn btn-warning"
             >Edit</a
           >
           <form
@@ -61,14 +67,74 @@
           </form>
         </td>
       </tr>
-      <% }) %>
-      <% } else { %>
+      <% }) %> <% } else { %>
       <tr>
         <td colspan="6" class="text-center">No Group Found</td>
       </tr>
       <% } %>
     </tbody>
   </table>
+  <!-- Member Modal -->
+  <div
+    class="modal fade"
+    id="memberModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Members</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="" id="add-member-form">
+          <div class="modal-body">
+            <input type="hidden" name="group_id" id="group_id" />
+            <input type="hidden" name="limit" id="limit" />
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Select</th>
+                  <th>Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="2">
+                    <div class="addMemberTable">
+                      <table class="table addMembersInTable">
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody id="memberList"></tbody>
+            </table>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">Update Member</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
   <!-- Modal -->
   <div
     class="modal fade"
