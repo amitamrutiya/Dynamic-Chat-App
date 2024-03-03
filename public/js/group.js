@@ -32,3 +32,35 @@ $('.addMember').click(function () {
         }
     })
 });
+
+// add member form submit code
+
+$('#add-member-form').submit(function (e) {
+    e.preventDefault();
+    var formData = $(this).serialize();
+    // let group_id = $('#group_id').val();
+    // let limit = $('#limit').val();
+    // let members = [];
+    // $('input[name="members[]"]:checked').each(function () {
+    //     members.push($(this).val());
+    // });
+
+    $.ajax({
+        url: '/groups/add-members',
+        type: 'POST',
+        data: formData,
+        success: function (response) {
+            if (response.success) {
+                alert(response.message);
+                $('#memberModal').modal('hide');
+                $('#add-member-form')[0].reset();
+            } else {
+                $('#add-member-error').text(response.message);
+                setTimeout(() => {
+                    $('#add-member-error').text('');
+                }, 3000); y
+            }
+        }
+    })
+}
+);

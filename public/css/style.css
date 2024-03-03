@@ -10940,6 +10940,11 @@ a[data-toggle="collapse"] {
 
 .addMemberTable {
   overflow-y: auto;
-  height: 100px;
+  height: 150px;
   width: 100%;
+}
+
+#add-member-error {
+  color: red;
+  font-size: 12px;
 }
