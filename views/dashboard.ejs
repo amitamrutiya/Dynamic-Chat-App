@@ -12,7 +12,7 @@
       >
         <img
           src="<%= 'http://localhost:' + port + '/' + users[i]['image'] %>"
-          alt=""
+          alt="<%= users[i]['name'] %>"
           width="50px"
           height="50px"
         />
@@ -113,7 +113,13 @@
       <form action="" id="edit-chat-form">
         <div class="modal-body">
           <input type="hidden" name="id" id="edit-message-id" />
-          <input type="text" name="message" id="edit-message" required placeholder="Enter Message">
+          <input
+            type="text"
+            name="message"
+            id="edit-message"
+            required
+            placeholder="Enter Message"
+          />
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">

@@ -1,0 +1,153 @@
+<%- include('layouts/header.ejs')%>
+
+<h2 class="mb-4">Groups</h2>
+
+<div class="container">
+  <!-- Button trigger modal -->
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-toggle="modal"
+    data-target="#createGroupModel"
+  >
+    Create Group
+  </button>
+
+  <% if (typeof message !== 'undefined') { %>
+  <p style="color: green"><%= message %></p>
+  <% } %>
+
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Limit</th>
+        <th>Members</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if (groups.length > 0) { %>
+      <% groups.forEach((group, index) => { %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td>
+          <img
+            src="<%= 'http://localhost:' + port + '/' + group.image %>"
+            alt="<%= group.name %>"
+            width="50"
+            height="50"
+          />
+        </td>
+        <td><%= group.name %></td>
+        <td><%= group.limit %></td>
+        <td>3</td>
+        <td>
+          <a href="/group/<%= group._id %>" class="btn btn-primary">View</a>
+          <a
+            href="/group/<%= group._id %>/edit"
+            class="btn btn-warning"
+            >Edit</a
+          >
+          <form
+            action="/group/<%= group._id %>?_method=DELETE"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      <% }) %>
+      <% } else { %>
+      <tr>
+        <td colspan="6" class="text-center">No Group Found</td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="createGroupModel"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Create Group</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="" method="POST" enctype="multipart/form-data">
+          <div class="modal-body">
+            <label for="name"> <strong>Group Name:</strong></label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Enter Group Name"
+              required
+              class="mb-2 ml-2"
+            />
+            <br />
+            <label for="image"> <strong>Group Profile:</strong></label>
+            <input
+              type="file"
+              name="image"
+              id="image"
+              required
+              class="mb-2 ml-2"
+            />
+            <br />
+            <label for="limit"><strong>User Limit:</strong></label>
+            <input
+              type="number"
+              min="1"
+              name="limit"
+              id="limit"
+              placeholder="Enter User Limit"
+              required
+              class="mb-2 ml-2"
+            />
+            <br />
+            <label for="description"><strong>Description:</strong></label>
+            <textarea
+              name="description"
+              id="description"
+              cols="50"
+              rows="1"
+              placeholder="Enter Description"
+              class="ml-2"
+            ></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('layouts/footer.ejs')%>

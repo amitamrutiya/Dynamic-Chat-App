@@ -3,6 +3,7 @@ const express = require("express");
 const http = require("http");
 const userRoute = require("./routes/userRoute");
 const chatRoute = require("./routes/chatRoute");
+const groupRoute = require("./routes/groupRoute");
 const session = require("express-session");
 const connectDB = require("./config/database");
 const socketHandler = require("./socket/socketHandler");
@@ -24,6 +25,11 @@ app.use(
 );
 app.use("/", userRoute);
 app.use("/", chatRoute);
+app.use("/", groupRoute);
+
+app.get("*", (req, res) => {
+  res.redirect("/");
+});
 
 const server = http.createServer(app);
 const io = require("socket.io")(server);

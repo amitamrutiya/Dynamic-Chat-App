@@ -1,6 +1,6 @@
 const isLogin = (req, res, next) => {
   try {
-    if (req.session.user && req.cookies.user) {
+    if (req.session.user) {
       return next();
     }
     res.redirect("/");
@@ -11,7 +11,7 @@ const isLogin = (req, res, next) => {
 
 const isLogout = (req, res, next) => {
   try {
-    if (!req.session.user && !req.cookies.user) {
+    if (!req.session.user ) {
       return next();
     }
     res.redirect("/dashboard");

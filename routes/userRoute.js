@@ -12,8 +12,5 @@ user_router.post("/register", upload.single("image"), userController.register);
 user_router.get("/logout", auth.isLogin, userController.logout);
 user_router.get("/dashboard", auth.isLogin, userController.loadDashboard);
 
-user_router.get("*", (req, res) => {
-  res.redirect("/");
-});
 
 module.exports = user_router;
