@@ -6,8 +6,10 @@ const chatRoute = require("./routes/chatRoute");
 const session = require("express-session");
 const connectDB = require("./config/database");
 const socketHandler = require("./socket/socketHandler");
+const cookieParser = require("cookie-parser");
 
 const app = express();
+app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", "views");
 app.use(express.json());

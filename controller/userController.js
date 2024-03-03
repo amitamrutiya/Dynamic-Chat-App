@@ -1,6 +1,5 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-const session = require("express-session");
 
 const registerLoad = (req, res) => {
   try {
@@ -62,6 +61,8 @@ const login = async (req, res) => {
     }
 
     req.session.user = userData;
+    res.cookie(`user`, JSON.stringify(userData));
+    console.log("Cookie created");
     res.redirect("/dashboard");
   } catch (err) {
     console.log(err);
@@ -70,6 +71,7 @@ const login = async (req, res) => {
 
 const logout = (req, res) => {
   try {
+    res.clearCookie("user");
     req.session.destroy();
     res.redirect("/");
   } catch (err) {

@@ -1,14 +1,23 @@
-var receiver_id = "";
-var socket = io("/user-namespace", {
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+const userData = JSON.parse(getCookie("user"));
+const sender_id = userData._id;
+let receiver_id = "";
+const socket = io("/user-namespace", {
     auth: {
-        token,
-        name,
+        token: userData._id,
+        name: userData.name,
     },
 });
 
 $(document).ready(function () {
     $(".user-list").click(function () {
-        var userId = $(this).attr("data-id");
+        const userId = $(this).attr("data-id");
         receiver_id = userId;
         $(".start-head").hide();
         $(".chat-section").show();
@@ -38,7 +47,7 @@ socket.on("getOfflineUser", function (data) {
 //chat save of user
 $("#chat-form").submit(function (e) {
     e.preventDefault();
-    var message = $("#message").val();
+    const message = $("#message").val();
     if (message) {
         $.ajax({
             url: "/save-chat",
