@@ -171,4 +171,58 @@ $(".join-now").click(function () {
 $(".group-list").click(function () {
     $(".group-start-head").hide();
     $(".group-chat-section").show();
+
+    global_group_id = $(this).attr("data-id");
+});
+
+$("#group-chat-form").submit(function (e) {
+    e.preventDefault();
+    const message = $("#group-message").val();
+    if (message) {
+        $.ajax({
+            url: "/groups/group-chat-save",
+            type: "POST",
+            data: {
+                sender_id: sender_id,
+                group_id: global_group_id,
+                message: message,
+            },
+
+            success: function (response) {
+                if (response.success) {
+                    $("#group-message").val("");
+                    let chat = response.chat.message;
+                    let html = `
+                        <div class="current-user-chat" id=${response.chat._id}>
+                            <h5>
+                                <span>${chat}</span>
+
+                            </h5>
+                        </div>
+                    `;
+                    $("#group-chat-container").append(html);
+                    scrollChat();
+                    socket.emit("newGroupChat", response.chat);
+                } else {
+                    alert(response.message);
+                }
+            },
+        });
+    }
+});
+
+socket.on("loadNewGroupChat", function (data) {
+
+    if (global_group_id == data.group_id) {
+        let chat = data.message;
+        let html = `
+            <div class="distance-user-chat" id=${data._id}>
+                <h5>
+                    <span>${chat}</span>
+                </h5>
+            </div>
+        `;
+        $("#group-chat-container").append(html);
+        scrollChat();
+    }
 });

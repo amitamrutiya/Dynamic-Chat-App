@@ -1,6 +1,7 @@
 const Group = require("../models/groupModel");
 const User = require("../models/userModel");
 const Member = require("../models/memberModel");
+const GroupChat = require("../models/groupChatModel");
 const mongoose = require("mongoose");
 
 const loadGroups = async (req, res) => {
@@ -197,6 +198,22 @@ const groupChat = async (req, res) => {
     }
 }
 
+const saveGroupChat = async (req, res) => {
+    try {
+        const groupChat = new GroupChat({
+            sender_id: req.body.sender_id,
+            group_id: req.body.group_id,
+            message: req.body.message
+        });
+        var newChat = await groupChat.save();
+        res.status(200).send({ success: true, message: "Message sent successfully", chat: newChat });
+    }
+    catch (error) {
+        res.status(400).send({ success: false, message: error.message });
+    }
+}
+
+
 module.exports = {
     loadGroups,
     createGroup,
@@ -207,4 +224,5 @@ module.exports = {
     shareGroup,
     joinGroup,
     groupChat,
+    saveGroupChat,
 };

@@ -12,6 +12,7 @@ group_router.post("/update-group", auth.isLogin, upload.single("image"), groupCo
 group_router.post("/delete-group", auth.isLogin, groupController.deleteGroup);
 group_router.get("/share-group/:id", groupController.shareGroup);
 group_router.post("/join-group", auth.isLogin, groupController.joinGroup);
-group_router.get("/group-chat",auth.isLogin, groupController.groupChat);
+group_router.get("/group-chat", auth.isLogin, groupController.groupChat);
+group_router.post("/group-chat-save", auth.isLogin, groupController.saveGroupChat);
 
 module.exports = group_router;

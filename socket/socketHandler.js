@@ -60,5 +60,10 @@ module.exports = function (usp) {
     socket.on('chatUpdated', (data) => {
       socket.broadcast.emit('chatMessageUpdated', data);
     });
+
+    // group chat
+    socket.on('newGroupChat', (data) => {
+      socket.broadcast.emit('loadNewGroupChat', data);
+    });
   });
 };
