@@ -20,11 +20,17 @@ Dynamic Chat App is a real-time communication application built using WebSocket 
 ## Features
 
 **User Registration:** Users can register in the application to start using the chat functionalities.
+
 **Login and Logout:** Secure user authentication mechanism with login and logout functionalities.
+
 **Group Creation:** Users can create groups to organize their conversations.
+
 **Group Invitation:** Invites you friend by just share group link.
+
 **Group Chat:** Real-time group chat feature for effective communication within groups.
+
 **Direct Messaging**: Ability to send direct messages to individual peers.
+
 **Online/Offline Status:** Displaying the online/offline status of peers for better interaction.
 
 ## Setup Instructions
