@@ -124,3 +124,20 @@ $("#deleteGroupForm").submit(function (e) {
         },
     });
 });
+
+//Copy group
+$(".copy").click(function () {
+    $(this).append("<span class='copied_text'>Copied!</span>");
+    let id = $(this).attr("data-id");
+    let url = window.location.host + "/share-group/" + id;
+
+    var temp = $("<input>")
+    $("body").append(temp);
+    temp.val(url).select();
+    document.execCommand("copy");
+
+    temp.remove();
+    setTimeout(() => {
+        $(".copied_text").remove();
+    }, 2000);
+});
