@@ -37,12 +37,12 @@ Dynamic Chat App is a real-time communication application built using WebSocket 
 
 1. Clone the repository to your local machine.
 ```
-git clone https://github.com/your-username/dynamic-chat-app.git
+https://github.com/amitamrutiya2210/Dynamic-Chat-App.git
 ``` 
 
 2. Navigate to the project directory.
 ```
-cd dynamic-chat-app
+cd Dynamic-Chat-App
 ```
 
 3. Copy the sample environment variables file and rename it to `.env`
