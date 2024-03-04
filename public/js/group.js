@@ -191,6 +191,8 @@ $(".group-list").click(function () {
                             <div class="current-user-chat" id=${chat._id}>
                                 <h5>
                                     <span>${chat.message}</span>
+                                      <i class="fa fa-trash deleteGroupChat" aria-hidden="true" data-id=${chat._id} data-toggle="modal" data-target="#deleteGroupChatModel"></i>
+                                      <i class="fa fa-edit updateGroupChat" aria-hidden="true" data-msg=${chat.message} data-id=${chat._id} data-toggle="modal" data-target="#editGroupChatModel"></i>
                                 </h5>
                             </div>
                         `;
@@ -234,7 +236,8 @@ $("#group-chat-form").submit(function (e) {
                         <div class="current-user-chat" id=${response.chat._id}>
                             <h5>
                                 <span>${chat}</span>
-
+                                 <i class="fa fa-trash deleteGroupChat" aria-hidden="true" data-id=${response.chat._id} data-toggle="modal" data-target="#deleteGroupChatModel"></i>
+                                 <i class="fa fa-edit updateGroupChat" aria-hidden="true" data-msg=${chat} data-id=${response.chat._id} data-toggle="modal" data-target="#editGroupChatModel"></i>
                             </h5>
                         </div>
                     `;
@@ -268,3 +271,71 @@ socket.on("loadNewGroupChat", function (data) {
 function scrollGroupChat() {
     $("#group-chat-container").animate({ scrollTop: $('#group-chat-container').prop("scrollHeight") }, 500);
 }
+
+$(document).on("click", ".deleteGroupChat", function () {
+    let msg = $(this).parent().find('span').text();
+    $("#delete-group-message").text(msg)
+    $("#delete-group-message-id").val($(this).attr("data-id"));
+}
+);
+
+$("#delete-group-chat-form").submit(function (e) {
+    e.preventDefault();
+    let id = $("#delete-group-message-id").val();
+    $.ajax({
+        url: "/groups/delete-group-chat",
+        type: "POST",
+        data: {
+            id,
+        },
+        success: function (response) {
+            if (response.success) {
+                $(`#${id}`).remove();
+                $("#deleteGroupChatModel").modal("hide");
+                socket.emit("groupChatDeleted", id);
+            } else {
+                alert(response.message);
+            }
+        },
+    });
+});
+
+socket.on("groupChatMessageDeleted", function (id) {
+    $(`#${id}`).remove();
+});
+
+// edit group chat
+$(document).on("click", ".updateGroupChat", function () {
+    let msg = $(this).attr("data-msg");
+    let id = $(this).attr("data-id");
+    $("#edit-group-message").val(msg);
+    $("#edit-group-message-id").val(id);
+}
+);
+
+$("#edit-group-chat-form").submit(function (e) {
+    e.preventDefault();
+    let id = $("#edit-group-message-id").val();
+    let message = $("#edit-group-message").val();
+    $.ajax({
+        url: "/groups/update-group-chat",
+        type: "POST",
+        data: {
+            id,
+            message,
+        },
+        success: function (response) {
+            if (response.success) {
+                $(`#${id}`).find('span').text(message);
+                $("#editGroupChatModel").modal("hide");
+                socket.emit("chatUpdated", { id, message });
+            } else {
+                alert(response.message);
+            }
+        },
+    });
+});
+
+socket.on("chatMessageUpdated", function (data) {
+    $(`#${data.id}`).find('span').text(data.message);
+});

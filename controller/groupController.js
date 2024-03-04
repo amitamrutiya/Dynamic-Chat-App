@@ -223,6 +223,26 @@ const loadGroupChats = async (req, res) => {
     }
 }
 
+const deleteGroupChat = async (req, res) => {
+    try {
+        await GroupChat.findByIdAndDelete(req.body.id);
+        res.status(200).send({ success: true, message: "Chat deleted successfully" });
+    }
+    catch (error) {
+        res.status(400).send({ success: false, message: error.message });
+    }
+}
+
+const updateGroupChat = async (req, res) => {
+    try {
+        const chat = await Group.findByIdAndUpdate(req.body.id, { $set: { message: req.body.message } }, { new: true });
+        res.status(200).send({ success: true, message: "Chat updated successfully", chat });
+    }
+    catch (error) {
+        res.status(400).send({ success: false, message: error.message });
+    }
+}
+
 module.exports = {
     loadGroups,
     createGroup,
@@ -235,4 +255,6 @@ module.exports = {
     groupChat,
     saveGroupChat,
     loadGroupChats,
+    deleteGroupChat,
+    updateGroupChat,
 };
