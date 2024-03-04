@@ -129,7 +129,7 @@ $("#deleteGroupForm").submit(function (e) {
 $(".copy").click(function () {
     $(this).append("<span class='copied_text'>Copied!</span>");
     let id = $(this).attr("data-id");
-    let url = window.location.host + "/share-group/" + id;
+    let url = window.location.host + "/groups/share-group/" + id;
 
     var temp = $("<input>")
     $("body").append(temp);
@@ -140,4 +140,29 @@ $(".copy").click(function () {
     setTimeout(() => {
         $(".copied_text").remove();
     }, 2000);
+});
+
+// join group
+$(".join-now").click(function () {
+    $(this).text("Wait....");
+    $(this).attr("disabled", "disabled");
+
+    var group_id = $(this).attr("data-id");
+
+    $.ajax({
+        url: "/groups/join-group",
+        type: "POST",
+        data: {
+            group_id: group_id,
+        },
+        success: function (response) {
+            alert(response.message);
+            if (response.success) {
+                location.reload();
+            } else {
+                $(this).text("Join Now");
+                $(this).removeAttr("disabled");
+            }
+        },
+    });
 });

@@ -132,6 +132,57 @@ const deleteGroup = async (req, res) => {
     }
 }
 
+const shareGroup = async (req, res) => {
+    try {
+        const group = await Group.findById(req.params.id);
+        if (!group) {
+            res.render('error', { message: 'Group not found' })
+        }
+        else if (req.session.user == undefined) {
+            res.render('error', { message: 'You need to login to access the Share URL!' })
+        }
+        else {
+            const totalMembers = await Member.find({ group_id: req.params.id }).countDocuments();
+            console.log(totalMembers)
+            if (totalMembers == undefined) totalMembers = 0;
+            const avilable = group.limit - totalMembers;
+            const isOwner = group.creator_id == req.session.user._id;
+            const isJoined = await Member.findOne({ group_id: req.params.id, user_id: req.session.user._id });
+            res.render('shareLink', { group, totalMembers, avilable, isOwner, isJoined });
+        }
+    } catch (error) {
+        res.status(400).send({ success: false, message: error.message });
+    }
+}
+
+const joinGroup = async (req, res) => {
+    try {
+        const group = await Group.findById(req.body.group_id);
+        if (!group) {
+            res.status(200).send({ success: false, message: 'Group not found' });
+        }
+        else {
+            const totalMembers = await Member.find({
+                group_id: req.body.group_id
+            }).countDocuments();
+            if (totalMembers >= group.limit) {
+                res.status(200).send({ success: false, message: 'Group limit reached' });
+            }
+            else {
+                const member = new Member({
+                    group_id: req.body.group_id,
+                    user_id: req.session.user._id
+                });
+                await member.save();
+                res.status(200).send({ success: true, message: "Congratulation, you have Joined the Group Successfully!" });
+            }
+        }
+    }
+    catch (error) {
+        res.status(400).send({ success: false, message: error.message });
+    }
+}
+
 module.exports = {
     loadGroups,
     createGroup,
@@ -139,4 +190,6 @@ module.exports = {
     addMembers,
     updateGroup,
     deleteGroup,
+    shareGroup,
+    joinGroup,
 };
