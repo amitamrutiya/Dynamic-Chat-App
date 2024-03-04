@@ -1,5 +1,4 @@
 // add member js
-
 $(".addMember").click(function () {
     let id = $(this).attr("data-id");
     let limit = $(this).attr("data-limit");
@@ -36,8 +35,6 @@ $(".addMember").click(function () {
     });
 });
 
-// add member form submit code
-
 $("#add-member-form").submit(function (e) {
     e.preventDefault();
     var formData = $(this).serialize();
@@ -63,7 +60,6 @@ $("#add-member-form").submit(function (e) {
 });
 
 //update group
-
 $(".updateGroup").click(function () {
     var obj = JSON.parse($(this).attr("data-obj"));
     $("#update_group_id").val(obj._id);
@@ -92,6 +88,37 @@ $("#updateChatGroupForm").submit(function (e) {
                 $("#update-group-error").text(response.message);
                 setTimeout(() => {
                     $("#update-group-error").text("");
+                }, 3000);
+            }
+        },
+    });
+});
+
+//delete group
+$(".deleteGroup").click(function () {
+    let id = $(this).attr("data-id");
+    let name = $(this).attr("data-name");
+    $("#delete_group_id").val(id);
+    $("#delete_group_name").text(name);
+});
+
+$("#deleteGroupForm").submit(function (e) {
+    e.preventDefault();
+    let formData = $(this).serialize();
+
+    $.ajax({
+        url: "/groups/delete-group",
+        type: "POST",
+        data: formData,
+        success: function (response) {
+            if (response.success) {
+                alert(response.message);
+                $('#deleteGroupModal').modal('hide');
+                location.reload();
+            } else {
+                $("#delete-group-error").text(response.message);
+                setTimeout(() => {
+                    $("#delete-group-error").text("");
                 }, 3000);
             }
         },

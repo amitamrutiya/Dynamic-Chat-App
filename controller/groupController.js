@@ -29,6 +29,7 @@ const createGroup = async (req, res) => {
         res.status(400).send({ success: false, message: error.message });
     }
 };
+
 const getMembers = async (req, res) => {
     try {
         const users = await User.aggregate([
@@ -120,10 +121,22 @@ const updateGroup = async (req, res) => {
     }
 }
 
+const deleteGroup = async (req, res) => {
+    try {
+        await Group.findByIdAndDelete(req.body.id);
+        await Member.deleteMany({ group: req.body.id });
+        res.status(200).send({ success: true, message: "Group deleted successfully" });
+    }
+    catch (error) {
+        res.status(400).send({ success: false, message: error.message });
+    }
+}
+
 module.exports = {
     loadGroups,
     createGroup,
     getMembers,
     addMembers,
     updateGroup,
+    deleteGroup,
 };

@@ -62,13 +62,16 @@
           >
             <i class="fa fa-pencil"></i
           ></a>
-          <form
-            action="/group/<%= group._id %>?_method=DELETE"
-            method="POST"
-            style="display: inline"
+          <span
+            style="margin-left: 10px"
+            class="deleteGroup"
+            data-id="<%= group._id %>"
+            data-name="<%= group.name %>"
+            data-toggle="modal"
+            data-target="#deleteGroupModel"
           >
-            <button type="submit" class="btn btn-danger">Delete</button>
-          </form>
+            <button class="btn btn-danger">Delete</button>
+          </span>
         </td>
       </tr>
       <% }) %> <% } else { %>
@@ -291,6 +294,54 @@
               Close
             </button>
             <button type="submit" class="btn btn-warning">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!--Delete Group Modal -->
+  <div
+    class="modal fade"
+    id="deleteGroupModel"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Delete Group</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="" id="deleteGroupForm">
+          <div class="modal-body">
+            <input type="hidden" name="id" id="delete_group_id" />
+            <p>
+              Are you sure you want to delete
+              <strong id="delete_group_name"> </strong> group?
+            </p>
+          </div>
+
+          <div class="modal-footer">
+            <p id="delete-group-error"></p>
+
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-danger">Delete</button>
           </div>
         </form>
       </div>
