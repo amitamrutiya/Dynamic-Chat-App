@@ -166,3 +166,9 @@ $(".join-now").click(function () {
         },
     });
 });
+
+// group chat
+$(".group-list").click(function () {
+    $(".group-start-head").hide();
+    $(".group-chat-section").show();
+});
