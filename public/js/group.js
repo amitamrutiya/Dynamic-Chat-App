@@ -173,6 +173,44 @@ $(".group-list").click(function () {
     $(".group-chat-section").show();
 
     global_group_id = $(this).attr("data-id");
+
+    // load old groups chat
+    $.ajax({
+        url: "/groups/load-group-chat",
+        type: "POST",
+        data: {
+            group_id: global_group_id,
+        },
+        success: function (response) {
+            if (response.success) {
+                let chats = response.data;
+                let html = "";
+                chats.forEach((chat) => {
+                    if (chat.sender_id == sender_id) {
+                        html += `
+                            <div class="current-user-chat" id=${chat._id}>
+                                <h5>
+                                    <span>${chat.message}</span>
+                                </h5>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <div class="distance-user-chat" id=${chat._id}>
+                                <h5>
+                                    <span>${chat.message}</span>
+                                </h5>
+                            </div>
+                        `;
+                    }
+                });
+                $("#group-chat-container").html(html);
+                scrollGroupChat();
+            } else {
+                alert(response.message);
+            }
+        },
+    });
 });
 
 $("#group-chat-form").submit(function (e) {
@@ -201,7 +239,7 @@ $("#group-chat-form").submit(function (e) {
                         </div>
                     `;
                     $("#group-chat-container").append(html);
-                    scrollChat();
+                    scrollGroupChat();
                     socket.emit("newGroupChat", response.chat);
                 } else {
                     alert(response.message);
@@ -223,6 +261,10 @@ socket.on("loadNewGroupChat", function (data) {
             </div>
         `;
         $("#group-chat-container").append(html);
-        scrollChat();
+        scrollGroupChat();
     }
 });
+
+function scrollGroupChat() {
+    $("#group-chat-container").animate({ scrollTop: $('#group-chat-container').prop("scrollHeight") }, 500);
+}

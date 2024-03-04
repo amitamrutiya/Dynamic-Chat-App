@@ -14,5 +14,6 @@ group_router.get("/share-group/:id", groupController.shareGroup);
 group_router.post("/join-group", auth.isLogin, groupController.joinGroup);
 group_router.get("/group-chat", auth.isLogin, groupController.groupChat);
 group_router.post("/group-chat-save", auth.isLogin, groupController.saveGroupChat);
+group_router.post("/load-group-chat", auth.isLogin, groupController.loadGroupChats);
 
 module.exports = group_router;
