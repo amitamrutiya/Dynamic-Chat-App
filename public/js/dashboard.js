@@ -68,7 +68,7 @@ $("#chat-form").submit(function (e) {
                             <h5>
                                 <span>${chat}</span>
                                 <i class="fa fa-trash" aria-hidden="true" data-id=${response.data._id} data-toggle="modal" data-target="#deleteChatModel"></i>
-                                <i class="fa fa-edit" aria-hidden="true" data-msg=${chat} data-id=${response.data._id} data-toggle="modal" data-target="#editChatModel"></i>
+                                <i class="fa fa-edit" aria-hidden="true" data-msg="${chat}" data-id=${response.data._id} data-toggle="modal" data-target="#editChatModel"></i>
                             </h5>
                         </div>
                     `;
@@ -113,7 +113,7 @@ socket.on("loadOldChat", function (data) {
                     <h5>
                         <span>${chat.message}</span>
                         <i class="fa fa-trash" aria-hidden="true" data-id=${chat._id} data-toggle="modal" data-target="#deleteChatModel"></i>
-                        <i class="fa fa-edit" aria-hidden="true" data-msg=${chat.message} data-id=${chat._id} data-toggle="modal" data-target="#editChatModel"></i>
+                        <i class="fa fa-edit" aria-hidden="true" data-msg="${chat.message}" data-id=${chat._id} data-toggle="modal" data-target="#editChatModel"></i>
                     </h5>
                 </div>
             `;

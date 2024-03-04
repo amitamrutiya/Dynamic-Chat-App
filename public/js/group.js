@@ -186,14 +186,20 @@ $(".group-list").click(function () {
                 let chats = response.data;
                 let html = "";
                 chats.forEach((chat) => {
-                    if (chat.sender_id == sender_id) {
+                    let date = new Date(chat.createdAt)
+                    let cDate = date.getDate()
+                    let cMonth = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)
+                    let cYear = date.getFullYear()
+                    let getFullDate = cDate + "-" + cMonth + "-" + cYear
+                    if (chat.sender_id._id == sender_id) {
                         html += `
                             <div class="current-user-chat" id=${chat._id}>
                                 <h5>
                                     <span>${chat.message}</span>
                                       <i class="fa fa-trash deleteGroupChat" aria-hidden="true" data-id=${chat._id} data-toggle="modal" data-target="#deleteGroupChatModel"></i>
-                                      <i class="fa fa-edit updateGroupChat" aria-hidden="true" data-msg=${chat.message} data-id=${chat._id} data-toggle="modal" data-target="#editGroupChatModel"></i>
+                                      <i class="fa fa-edit updateGroupChat" aria-hidden="true" data-msg="${chat.message}" data-id=${chat._id} data-toggle="modal" data-target="#editGroupChatModel"></i>
                                 </h5>
+                                <div class="user-data"><b>You </b>${getFullDate}</div>
                             </div>
                         `;
                     } else {
@@ -201,6 +207,9 @@ $(".group-list").click(function () {
                             <div class="distance-user-chat" id=${chat._id}>
                                 <h5>
                                     <span>${chat.message}</span>
+                                    <div class="user-data">
+                                        <img src="/${chat.sender_id.image} " alt="user" class="user-chat-image" />
+                                        <b> ${chat.sender_id.name} </b>${getFullDate} </div>
                                 </h5>
                             </div>
                         `;
@@ -230,6 +239,11 @@ $("#group-chat-form").submit(function (e) {
 
             success: function (response) {
                 if (response.success) {
+                    let date = new Date(response.chat.createdAt)
+                    let cDate = date.getDate()
+                    let cMonth = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)
+                    let cYear = date.getFullYear()
+                    let getFullDate = cDate + "-" + cMonth + "-" + cYear
                     $("#group-message").val("");
                     let chat = response.chat.message;
                     let html = `
@@ -237,8 +251,9 @@ $("#group-chat-form").submit(function (e) {
                             <h5>
                                 <span>${chat}</span>
                                  <i class="fa fa-trash deleteGroupChat" aria-hidden="true" data-id=${response.chat._id} data-toggle="modal" data-target="#deleteGroupChatModel"></i>
-                                 <i class="fa fa-edit updateGroupChat" aria-hidden="true" data-msg=${chat} data-id=${response.chat._id} data-toggle="modal" data-target="#editGroupChatModel"></i>
+                                 <i class="fa fa-edit updateGroupChat" aria-hidden="true" data-msg="${chat}" data-id=${response.chat._id} data-toggle="modal" data-target="#editGroupChatModel"></i>
                             </h5>
+                            <div class="user-data"><b>You </b>${getFullDate}</div>
                         </div>
                     `;
                     $("#group-chat-container").append(html);
@@ -253,14 +268,21 @@ $("#group-chat-form").submit(function (e) {
 });
 
 socket.on("loadNewGroupChat", function (data) {
-
     if (global_group_id == data.group_id) {
+        let date = new Date(data.createdAt)
+        let cDate = date.getDate()
+        let cMonth = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)
+        let cYear = date.getFullYear()
+        let getFullDate = cDate + "-" + cMonth + "-" + cYear
         let chat = data.message;
         let html = `
             <div class="distance-user-chat" id=${data._id}>
                 <h5>
                     <span>${chat}</span>
                 </h5>
+                <div class="user-data">
+                    <img src="/${data.sender_id.image} " alt="user" class="user-chat-image" />
+                    <b> ${data.sender_id.name} </b>${getFullDate} </div>
             </div>
         `;
         $("#group-chat-container").append(html);
