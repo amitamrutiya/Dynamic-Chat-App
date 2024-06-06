@@ -1,6 +1,6 @@
 # Dynamic Chat App [(Website)](https://dynamic-chat-app-1t7a.onrender.com/)
 
-## Description 
+## Description
 
 Dynamic Chat App is a real-time communication application built using WebSocket technology. It enables users to chat with peers individually, create group chats, and manage groups seamlessly. This application also incorporates user authentication functionalities such as login and logout, along with features like online/offline status tracking for peers.
 
@@ -37,8 +37,8 @@ Dynamic Chat App is a real-time communication application built using WebSocket 
 
 1. Clone the repository to your local machine.
 ```
-https://github.com/amitamrutiya2210/Dynamic-Chat-App.git
-``` 
+git clone https://github.com/amitamrutiya2210/Dynamic-Chat-App.git
+```
 
 2. Navigate to the project directory.
 ```
@@ -50,7 +50,7 @@ cd Dynamic-Chat-App
 cp sample.env .env
 ```
 
-4. Edit the .env file and fill in the required values for environment variables such as database 
+4. Edit the .env file and fill in the required values for environment variables such as database
 connection URI, session secret, etc.
 
 5. Install dependencies using npm.
